@@ -16,6 +16,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: fetch latest build
+        id: fetch-latest-build
+        run: |
+          echo fetching latest build from uupdump.net
+          curl "https://api.uupdump.net/fetchupd.php?arch=amd64&ring=canary" >> $RESULT
+
+      - name: print latest build info
+        run: |
+          echo latest build title: ${{ fromJSON(steps.fetch-latest-build.outputs.result).response.updateTitle }}
+          echo latest build id: ${{ fromJSON(steps.fetch-latest-build.outputs.result).response.updateId }}
       
       - name: Run a multi-line script
         run: |
